@@ -496,11 +496,13 @@ if (NOT EMSCRIPTEN)
     endif ()
 
     # test running
-    find_package(PythonInterp 2.7 REQUIRED)
+    # TODO(sbc): Switch to Python (which selects python3 over python2 when
+    # found once we fix: https://github.com/WebAssembly/wabt/issues/1180
+    find_package(Python2 COMPONENTS Interpreter REQUIRED)
     set(RUN_TESTS_PY ${WABT_SOURCE_DIR}/test/run-tests.py)
     add_custom_target(run-tests
       COMMAND $<TARGET_FILE:wabt-unittests>
-      COMMAND ${PYTHON_EXECUTABLE} ${RUN_TESTS_PY} --bindir $<TARGET_FILE_DIR:wat2wasm>
+      COMMAND ${Python2_EXECUTABLE} ${RUN_TESTS_PY} --bindir $<TARGET_FILE_DIR:wabt-unittests>
       DEPENDS ${WABT_EXECUTABLES}
       WORKING_DIRECTORY ${WABT_SOURCE_DIR}
       ${USES_TERMINAL}
